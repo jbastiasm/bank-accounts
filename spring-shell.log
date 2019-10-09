@@ -1,0 +1,66 @@
+1570441086991:add Juan Bastias
+1570451653873:add_admin --l admin --e 1 --l 0 --a 1 --u 0
+1570451677055:add_admin -l admin -e 1 -l 0 -a 1 -u 0
+1570451864068:add_admin -login admin -edit 1 -list 0 -add 1 -update 0
+1570451909157:add_admin admin 1 0 1 0
+1570453782002:add_admin user
+1570453814183:add_admin user true
+1570453830581:add_admin user 1
+1570453889308:add_admin user true
+1570454367527:add_admin user --edit
+1570454452340:add_admin admin --edit --list --add --update
+1570454706128:list_admin
+1570455346298:login juan
+1570455358217:login juan pass
+1570476953085:delete_admin juan
+1570476967814:exit
+1570477002324:delete_admin juan
+1570477054420:login admin 1234
+1570477068597:delete_admin juan
+1570479872088:login admin 1234
+1570479945558:add_admin juan 1234 add
+1570479963988:add_admin juan 1234 --add
+1570480075167:login admin 1234
+1570480092179:add_admin juan 1234 --add
+1570480106062:list_admin
+1570480201382:login admin 1234
+1570480225995:add_admin juan 1234 --add
+1570480235631:admin_list
+1570480244436:list_admin
+1570542807179:login admin 1234
+1570542839202:add_admin admin1 1234
+1570542857694:delete_admin admin1
+1570543246637:login admin 1234
+1570543324861:add_admin admin1 1234 --add --delete --udpate --list
+1570543402303:login admin 1234
+1570543422961:add_admin admin1 1234 --add
+1570543436716:logout
+1570543447164:login admin1 1234
+1570543460729:add_user juan pardo
+1570543495863:logout
+1570543501524:login admin 1234
+1570543508067:add_admin admin2 1234
+1570543526646:add_admin admin3 1234 --add --list
+1570543532970:logout
+1570543539498:login admin3 1234
+1570543556910:add_user juan blanco
+1570543564523:add_user carlos gonzalez
+1570543568521:list_user
+1570545220261:exit
+1570546809296:login admin 1234
+1570546849938:add_admin admin1 1234 --add --list
+1570546856870:logout
+1570546863358:login admin1 1234
+1570546890346:add_user juan checa
+1570547221136:login admin 1234
+1570547230137:add_user juan bastias
+1570549264392:admin sdf asdfasdf
+1570549277562:login asdf asdfasd
+1570549282917:login admin 1234
+1570549304373:add_user juan bastias --add --list
+1570549339829:add_user juan bastias --list --add
+1570549358245:add_user juan bastias
+1570550209946:login admin 1234
+1570550216849:add_user juan bastias
+1570550274554:login admin 1234
+1570550285956:add_user bastias juan
