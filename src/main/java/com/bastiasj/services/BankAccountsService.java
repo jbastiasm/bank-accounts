@@ -16,17 +16,19 @@ import com.bastiasj.repositories.UsersRepository;
 @Service
 public class BankAccountsService {
 
-	private static final String ERROR_LIST_USERS = "There was an error getting restriction list.";
-	private static final String ERROR_LIST_RESTRICTION = ERROR_LIST_USERS;
-	private static final String ERROR_CREATE_USER = "There was an error, the user wasn't created";
-	private static final String SPLIT = "  |  ";
-	private static final String SKIP_LINE = "\n";
+	public static final String ERROR_LIST_USERS = "There was an error getting restriction list.";
+	public static final String ERROR_LIST_RESTRICTION = ERROR_LIST_USERS;
+	public static final String ERROR_CREATE_USER = "There was an error, the user wasn't created";
+	public static final String SPLIT = "  |  ";
+	public static final String SKIP_LINE = "\n";
 	private static final String SUPER_ADMIN_LOGIN = "admin";
 	private static final String SUPER_ADMIN_PASSWORD = "1234";
 	
 	/*************** ERRORS *********************************/
-	private static final String ERROR_ADMIN = "There was an error, the new Admin wasn't created.";
-	private static final String ERROR_RESTRICTION = "There was an error, the restricction wasn't updated.";
+	public static final String ERROR_ADMIN = "There was an error, the new Admin wasn't created.";
+	public static final String ERROR_RESTRICTION = "There was an error, the restricction wasn't updated.";
+
+	/*************** REPOSITORIES *********************************/
 
 
 	Logger logger = LoggerFactory.getLogger(BankAccountsService.class);
@@ -40,6 +42,19 @@ public class BankAccountsService {
 	@Autowired
 	private RestrictionsRepository resRepository;
 	
+		
+	public BankAccountsService() {
+		super();
+	}
+
+	public BankAccountsService(UsersRepository usRepository, AdminRepository adminRepository,
+			RestrictionsRepository resRepository) {
+		super();
+		this.usRepository = usRepository;
+		this.adminRepository = adminRepository;
+		this.resRepository = resRepository;
+	}
+
 	//************** Common methods *************************/
 	public Admin login(String login, String password) {
 
