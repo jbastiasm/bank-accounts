@@ -40,8 +40,8 @@ public class BankAccountsServiceTest {
 		admin =new Admin(SUPER_ADMIN_LOGIN, SUPER_ADMIN_PASSWORD);
 		
 		users=new ArrayList<>();		
-		User user1 =new User(admin, "firstName1", "lastName1", "IBAN");
-		User user2 =new User(admin, "firstName2", "lastName2", "IBAN");
+		User user1 =new User("firstName1", "lastName1", "IBAN");
+		User user2 =new User("firstName2", "lastName2", "IBAN");
 		users.add(user1);
 		users.add(user2);
 		

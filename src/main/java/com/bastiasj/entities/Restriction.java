@@ -23,9 +23,9 @@ public class Restriction {
 	@JoinColumn(name = "admin_id", referencedColumnName = "id")
 	private Admin admin;
 
-	private boolean userDeleteEnabled;	
-	private boolean userListEnabled;	
-	private boolean userUpdateEnabled;
+	private boolean delete;	
+	private boolean update;	
+	private boolean list;
 		
 	public Restriction() {
 	}
@@ -33,9 +33,9 @@ public class Restriction {
 			boolean userUpdateEnabled) {
 		this.user = user;
 		this.admin = admin;
-		this.userDeleteEnabled = userDeleteEnabled;
-		this.userListEnabled = userListEnabled;
-		this.userUpdateEnabled = userUpdateEnabled;
+		this.delete = userDeleteEnabled;
+		this.list = userListEnabled;
+		this.update = userUpdateEnabled;
 	}
 	public Long getId() {
 		return id;
@@ -45,16 +45,7 @@ public class Restriction {
 	}
 	public Admin getAdmin() {
 		return admin;
-	}
-	public boolean isUserDeleteEnabled() {
-		return userDeleteEnabled;
-	}
-	public boolean isUserListEnabled() {
-		return userListEnabled;
-	}
-	public boolean isUserUpdateEnabled() {
-		return userUpdateEnabled;
-	}
+	}	
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -64,14 +55,22 @@ public class Restriction {
 	public void setAdmin(Admin admin) {
 		this.admin = admin;
 	}
-	public void setUserDeleteEnabled(boolean userDeleteEnabled) {
-		this.userDeleteEnabled = userDeleteEnabled;
+	public boolean isDelete() {
+		return delete;
 	}
-	public void setUserListEnabled(boolean userListEnabled) {
-		this.userListEnabled = userListEnabled;
+	public boolean isUpdate() {
+		return update;
 	}
-	public void setUserUpdateEnabled(boolean userUpdateEnabled) {
-		this.userUpdateEnabled = userUpdateEnabled;
+	public boolean isList() {
+		return list;
 	}
-
+	public void setDelete(boolean delete) {
+		this.delete = delete;
+	}
+	public void setUpdate(boolean update) {
+		this.update = update;
+	}
+	public void setList(boolean list) {
+		this.list = list;
+	}
 }
