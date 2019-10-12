@@ -15,7 +15,7 @@ import org.springframework.dao.DataAccessException;
 
 import com.bastiasj.entities.Admin;
 import com.bastiasj.entities.Restriction;
-import com.bastiasj.entities.User;
+import com.bastiasj.entities.Users;
 import com.bastiasj.repositories.AdminRepository;
 import com.bastiasj.repositories.RestrictionsRepository;
 import com.bastiasj.repositories.UsersRepository;
@@ -31,7 +31,7 @@ public class BankAccountsServiceTest {
 	private UsersRepository usRepository = mock(UsersRepository.class);
 	private BankAccountsService bankAccountsService;
 	private Admin admin;
-	private List<User> users;
+	private List<Users> users;
 	private List<Restriction> restrictions;
 	
 	@Before
@@ -40,8 +40,8 @@ public class BankAccountsServiceTest {
 		admin =new Admin(SUPER_ADMIN_LOGIN, SUPER_ADMIN_PASSWORD);
 		
 		users=new ArrayList<>();		
-		User user1 =new User("firstName1", "lastName1", "IBAN");
-		User user2 =new User("firstName2", "lastName2", "IBAN");
+		Users user1 =new Users("firstName1", "lastName1", "IBAN");
+		Users user2 =new Users("firstName2", "lastName2", "IBAN");
 		users.add(user1);
 		users.add(user2);
 		

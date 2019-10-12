@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.bastiasj.entities.Admin;
 import com.bastiasj.entities.Restriction;
-import com.bastiasj.entities.User;
+import com.bastiasj.entities.Users;
 import com.bastiasj.repositories.AdminRepository;
 import com.bastiasj.repositories.RestrictionsRepository;
 import com.bastiasj.repositories.UsersRepository;
@@ -114,36 +114,35 @@ public class BankAccountsService {
 	}
 
 	public String updateRestriction(Long id, boolean delete, boolean list, boolean update) {
-		Restriction res = null;
 		try {
-			res = resRepository.updateRestriction(id, delete, list, update);
+			return resRepository.updateRestriction(id, delete, list, update) != null ? "Restriction was updated succesful." : ERROR_RESTRICTION;
 		} catch (Exception e) {
 			return logException(ERROR_RESTRICTION, e);
 		}
-		return res != null ? "Restriction was updated succesful." : ERROR_RESTRICTION;
 	}
 
 	// ************** User *************************/
 
 	public String addUser(Admin currentAdmin, String firstName, String lastName, String iban) {
-		User user = null;
+		Users user = null;
 		try {
 			if (usRepository.checkDuplicateIBAN(iban) != null) {
 				return "IBAN field was already registered. Please, try another one.";
 			}
-			user = usRepository.save(new User(firstName, lastName, iban));
+			user = usRepository.save(new Users(firstName, lastName, iban));
 			resRepository.save(new Restriction(user, currentAdmin, true, true, true));
+			return user != null ? "User was created succesful." : ERROR_CREATE_USER;
 		} catch (Exception e) {
 			return logException(ERROR_CREATE_USER, e);
 		}
-		return user != null ? "User was created succesful." : ERROR_CREATE_USER;
 	}
 
 	public String listUsers(Admin admin) {
 		try {
 			StringBuffer buf = new StringBuffer();
 			buf.append("==================USERS LIST=====================").append(SKIP_LINE);
-			for (User user : usRepository.findAllUsersByAdmin(admin.getId())) {
+			for (Users user : usRepository.findAllUsersByAdmin(admin.getId())) {
+				buf.append(StringUtils.rightPad(user.getId().toString(), 4)).append(SPLIT);
 				buf.append(StringUtils.rightPad(user.getFirstName() + " " + user.getLastName(), 20)).append(SPLIT);
 				buf.append(user.getIban()).append(SKIP_LINE);
 			}
@@ -157,9 +156,9 @@ public class BankAccountsService {
 
 	public String deleteUser(Admin admin, Long id) {
 		try {
-			resRepository.deleteRestriction(admin.getId(), id);
-			usRepository.deleteById(id);
-			return "User deleted successful.";
+			return resRepository.deleteRestriction(admin.getId(), id) != null && usRepository.deleteUserById(id) != null
+					? "User deleted successful."
+					: ERROR_DELETE_USER;
 		} catch (Exception e) {
 			return logException(ERROR_DELETE_USER, e);
 		}
@@ -167,7 +166,8 @@ public class BankAccountsService {
 
 	public String updateUserById(Admin admin, Long id, String firstName, String lastName, String iban) {
 		try {
-			return "";
+			return usRepository.updateUserById(id, firstName, lastName, iban) != null ? "User was updated succesful."
+					: ERROR_UPDATE_USER;
 		} catch (Exception e) {
 			return logException(ERROR_UPDATE_USER, e);
 		}

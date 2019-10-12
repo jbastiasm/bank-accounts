@@ -17,7 +17,7 @@ public class Restriction {
 
 	@ManyToOne(cascade = { CascadeType.MERGE })
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
-	private User user;
+	private Users user;
 
 	@ManyToOne(cascade = { CascadeType.MERGE })
 	@JoinColumn(name = "admin_id", referencedColumnName = "id")
@@ -29,7 +29,7 @@ public class Restriction {
 		
 	public Restriction() {
 	}
-	public Restriction(User user, Admin admin, boolean userDeleteEnabled, boolean userListEnabled,
+	public Restriction(Users user, Admin admin, boolean userDeleteEnabled, boolean userListEnabled,
 			boolean userUpdateEnabled) {
 		this.user = user;
 		this.admin = admin;
@@ -40,7 +40,7 @@ public class Restriction {
 	public Long getId() {
 		return id;
 	}
-	public User getUser() {
+	public Users getUser() {
 		return user;
 	}
 	public Admin getAdmin() {
@@ -49,7 +49,7 @@ public class Restriction {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public void setUser(User user) {
+	public void setUser(Users user) {
 		this.user = user;
 	}
 	public void setAdmin(Admin admin) {

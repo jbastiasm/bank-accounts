@@ -1,7 +1,9 @@
 package com.bastiasj;
 
+import org.jline.utils.AttributedString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.Availability;
+import org.springframework.shell.jline.PromptProvider;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
@@ -16,6 +18,9 @@ public class Commands {
 
 	@Autowired
 	private BankAccountsService service;
+	
+	@Autowired
+	private PromptProvider myPromptProvider;
 
 	/*************** CURRENT ADMIN ***********************************/
 
@@ -33,9 +38,10 @@ public class Commands {
 	@ShellMethod("Login on application.")
 	public String login(String login, String password) {
 		if (currentAdmin != null) {
-			return "Actually you are loggin as '" + login + "'.Please, execute logout command.";
+			return "Actually you are loggin as '" + currentAdmin.getLogin() + "'.Please, execute logout command.";
 		}
 		currentAdmin = service.login(login, password);
+		myPromptProvider.getPrompt().join(new AttributedString(":"), new AttributedString(login));
 		return currentAdmin != null ? "Admin with login: " + login + ", was logged."
 				: "Admin not found or something was wrong with this operation";
 
