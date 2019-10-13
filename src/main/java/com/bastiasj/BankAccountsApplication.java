@@ -1,5 +1,6 @@
 package com.bastiasj;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jline.utils.AttributedString;
 import org.jline.utils.AttributedStyle;
 import org.springframework.boot.SpringApplication;
@@ -25,13 +26,21 @@ public class BankAccountsApplication {
 	}
 
 	@Bean
-	public PromptProvider myPromptProvider() {
+	public PromptProvider myPromptProvider(Prompt prompt) {
 		return new PromptProvider() {
 			@Override
 			public AttributedString getPrompt() {
-				return new AttributedString("bank-shell:>",
-				        AttributedStyle.DEFAULT.foreground(AttributedStyle.RED));
+
+				String activePrompt = StringUtils.isNotBlank(prompt.getActivePrompt()) ? prompt.getActivePrompt() : "";
+
+				return new AttributedString("bank-shell:" + activePrompt + ">",
+						AttributedStyle.DEFAULT.foreground(AttributedStyle.RED));
 			}
 		};
+	}
+
+	@Bean
+	public Prompt prompt() {
+		return new Prompt();
 	}
 }

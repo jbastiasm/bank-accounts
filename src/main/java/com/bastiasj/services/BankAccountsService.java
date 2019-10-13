@@ -13,6 +13,11 @@ import com.bastiasj.repositories.AdminRepository;
 import com.bastiasj.repositories.RestrictionsRepository;
 import com.bastiasj.repositories.UsersRepository;
 
+/**
+ * Bank Account Service class
+ * 
+ * @author bastias
+ */
 @Service
 public class BankAccountsService {
 
@@ -20,9 +25,10 @@ public class BankAccountsService {
 	public static final String SKIP_LINE = "\n";
 	public static final String SUPER_ADMIN_LOGIN = "admin";
 	private static final String SUPER_ADMIN_PASSWORD = "1234";
+	private static final Admin SUPER_ADMIN = new Admin(SUPER_ADMIN_LOGIN, SUPER_ADMIN_PASSWORD);
 
 	/*************** ERRORS *********************************/
-	
+
 	public static final String ERROR_ADMIN = "There was an error, the new Admin wasn't created.";
 	public static final String ERROR_RESTRICTION = "There was an error, the restricction wasn't updated.";
 	public static final String ERROR_LIST_USERS = "There was an error getting restriction list.";
@@ -30,7 +36,6 @@ public class BankAccountsService {
 	public static final String ERROR_CREATE_USER = "There was an error, the user wasn't created.";
 	public static final String ERROR_UPDATE_USER = "There was an error, the user wasn't updated.";
 	public static final String ERROR_DELETE_USER = "There was an error, the user wasn't deleted.";
-
 
 	/*************** REPOSITORIES *********************************/
 
@@ -60,23 +65,13 @@ public class BankAccountsService {
 	// ************** Common methods *************************/
 
 	public Admin login(String login, String password) {
-
-		Admin currentAdmin = null;
-
 		try {
-			if (SUPER_ADMIN_LOGIN.equals(login) && SUPER_ADMIN_PASSWORD.equals(SUPER_ADMIN_PASSWORD)) {
-				currentAdmin = adminRepository.findAdminByLogin(SUPER_ADMIN_LOGIN);
-				if (currentAdmin == null) {
-					currentAdmin = adminRepository.save(new Admin(SUPER_ADMIN_LOGIN, SUPER_ADMIN_PASSWORD));
-				}
-			} else {
-				currentAdmin = adminRepository.findAdminByLogin(login);
-			}
+			return (SUPER_ADMIN_LOGIN.equals(login) && SUPER_ADMIN_PASSWORD.equals(SUPER_ADMIN_PASSWORD)) ? SUPER_ADMIN
+					: adminRepository.findAdminByLogin(login);
 		} catch (Exception e) {
 			logger.error("There was an exception with login operation, {}", e);
+			return null;
 		}
-
-		return currentAdmin;
 	}
 
 	// ************** Admin *************************/
@@ -115,7 +110,9 @@ public class BankAccountsService {
 
 	public String updateRestriction(Long id, boolean delete, boolean list, boolean update) {
 		try {
-			return resRepository.updateRestriction(id, delete, list, update) != null ? "Restriction was updated succesful." : ERROR_RESTRICTION;
+			return resRepository.updateRestriction(id, delete, list, update) != null
+					? "Restriction was updated succesful."
+					: ERROR_RESTRICTION;
 		} catch (Exception e) {
 			return logException(ERROR_RESTRICTION, e);
 		}
@@ -166,7 +163,7 @@ public class BankAccountsService {
 
 	public String updateUserById(Admin admin, Long id, String firstName, String lastName, String iban) {
 		try {
-			return usRepository.updateUserById(id, firstName, lastName, iban) != null ? "User was updated succesful."
+			return usRepository.updateUserById(id, firstName, lastName, iban) != null ? "User was updated successful."
 					: ERROR_UPDATE_USER;
 		} catch (Exception e) {
 			return logException(ERROR_UPDATE_USER, e);

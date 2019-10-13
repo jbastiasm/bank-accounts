@@ -2,6 +2,7 @@ package com.bastiasj.services;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -11,7 +12,6 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.dao.DataAccessException;
 
 import com.bastiasj.entities.Admin;
 import com.bastiasj.entities.Restriction;
@@ -41,7 +41,9 @@ public class BankAccountsServiceTest {
 		
 		users=new ArrayList<>();		
 		Users user1 =new Users("firstName1", "lastName1", "IBAN");
+		user1.setId(1l);
 		Users user2 =new Users("firstName2", "lastName2", "IBAN");
+		user2.setId(2l);
 		users.add(user1);
 		users.add(user2);
 		
@@ -77,13 +79,7 @@ public class BankAccountsServiceTest {
 		assertNotNull(bankAccountsService.login("admin", "pass"));
 	}
 
-	@Test
-	public void testAdminNotFound() {
-		when(adminRepository.findAdminByLogin("admin")).thenReturn(null);
-		assertNotNull(bankAccountsService.login("admin", "pass"));
-
-	}
-
+	
 	@Test
 	public void testAddAdminSuccess() {
 
@@ -102,14 +98,7 @@ public class BankAccountsServiceTest {
 		assertEquals("There was an error, the new Admin wasn't created.", message);
 	}
 
-	@Test
-	public void testAddAdminException() {
-		when(adminRepository.save(any(Admin.class))).thenThrow(DataAccessException.class);
-		String message = bankAccountsService.addAdmin("admin", "pass");
-		assertNotNull(message);
-		assertEquals("There was an error, the new Admin wasn't created.", message);
-	}
-	
+		
 	@Test
 	public void listRestrictionsWithResults() {
 		when(resRepository.findAll()).thenReturn(restrictions);
@@ -155,5 +144,143 @@ public class BankAccountsServiceTest {
 		assertEquals(BankAccountsService.ERROR_LIST_RESTRICTION, result);
 
 	}
+	
+	@Test
+	public void updateRestrictionException() throws Exception {
+		when(resRepository.updateRestriction(1l, true, false, false)).thenThrow(Exception.class);
+		String message = bankAccountsService.updateRestriction(1l, true, false, false);
+		assertNotNull(message);
+		assertEquals(BankAccountsService.ERROR_RESTRICTION, message);
+	}
+	
+
+	@Test
+	public void updateRestrictionNullResult() throws Exception {
+		when(resRepository.updateRestriction(1l, true, false, false)).thenReturn(null);
+		String message = bankAccountsService.updateRestriction(1l, true, false, false);
+		assertNotNull(message);
+		assertEquals(BankAccountsService.ERROR_RESTRICTION, message);
+	}
+	
+
+	@Test
+	public void updateRestrictionSuccess() throws Exception {
+		when(resRepository.updateRestriction(1l, true, false, false)).thenReturn(1);
+		String message = bankAccountsService.updateRestriction(1l, true, false, false);
+		assertNotNull(message);
+		assertEquals("Restriction was updated succesful.", message);
+	}
+	
+	@Test
+	public void addUserIBANDuplicated() throws Exception {
+		when(usRepository.checkDuplicateIBAN("ABCE123")).thenReturn(new Users());
+		String message = bankAccountsService.addUser(new Admin(), "firstName", "lastName", "ABCE123");
+		assertNotNull(message);
+		assertEquals("IBAN field was already registered. Please, try another one.", message);
+	}
+	
+		
+	@Test
+	public void addUserNullResult() {
+		when(usRepository.save(any(Users.class))).thenReturn(null);
+		String message = bankAccountsService.addUser(new Admin(), "firstName", "lastName", "ABCE123");
+		assertNotNull(message);
+		assertEquals(BankAccountsService.ERROR_CREATE_USER, message);
+		
+	}
+	
+	@Test
+	public void addUserSuccess() {
+		when(usRepository.save(any(Users.class))).thenReturn(new Users());
+		String message = bankAccountsService.addUser(new Admin(), "firstName", "lastName", "ABCE123");
+		assertNotNull(message);
+		assertEquals("User was created succesful.", message);
+	}
+	
+	@Test
+	public void listUsersEmptyResult() throws Exception {
+		when(usRepository.findAllUsersByAdmin(any(Long.class))).thenReturn(new ArrayList<>());
+		String message = bankAccountsService.listUsers(new Admin());
+		assertNotNull(message);
+		
+		StringBuffer buf = new StringBuffer();
+		buf.append("==================USERS LIST=====================").append(BankAccountsService.SKIP_LINE);
+		buf.append("=================================================").append(BankAccountsService.SKIP_LINE);
+		
+		assertEquals(buf.toString(), message);
+	}
+	
+	@Test
+	public void listUsersException() throws Exception {
+		when(usRepository.findAllUsersByAdmin(any(Long.class))).thenThrow(Exception.class);
+		String message = bankAccountsService.listUsers(new Admin());
+		assertNotNull(message);		
+		assertEquals(BankAccountsService.ERROR_LIST_USERS, message);
+	}
+		
+	@Test
+	public void listUsersSuccess() throws Exception {
+		when(usRepository.findAllUsersByAdmin(any(Long.class))).thenReturn(users);
+		String message = bankAccountsService.listUsers(new Admin());
+		assertNotNull(message);
+		
+		StringBuffer buf = new StringBuffer();
+		buf.append("==================USERS LIST=====================").append(BankAccountsService.SKIP_LINE);
+		buf.append("1     |  firstName1 lastName1  |  IBAN").append(BankAccountsService.SKIP_LINE);
+		buf.append("2     |  firstName2 lastName2  |  IBAN").append(BankAccountsService.SKIP_LINE);
+		buf.append("=================================================").append(BankAccountsService.SKIP_LINE);
+		
+		assertEquals(buf.toString(), message);
+	}
+	
+	@Test
+	public void deleteUserSuccess() throws Exception {
+		when(resRepository.deleteRestriction(any(Long.class),any(Long.class))).thenReturn(1);
+		when(usRepository.deleteUserById(any(Long.class))).thenReturn(1);
+		String message = bankAccountsService.deleteUser(new Admin(), 1l);
+		assertNotNull(message);
+		assertEquals("User deleted successful.", message);
+	}
+	
+	@Test
+	public void deleteUserException() throws Exception {
+		when(resRepository.deleteRestriction(any(Long.class),any(Long.class))).thenThrow(Exception.class);
+		String message = bankAccountsService.deleteUser(new Admin(), 1l);
+		assertNotNull(message);
+		assertEquals(BankAccountsService.ERROR_DELETE_USER, message);
+	}
+	
+	@Test
+	public void deleteUserNullResult() throws Exception {
+		when(resRepository.deleteRestriction(any(Long.class),any(Long.class))).thenReturn(null);
+		String message = bankAccountsService.deleteUser(new Admin(), 1l);
+		assertNotNull(message);
+		assertEquals(BankAccountsService.ERROR_DELETE_USER, message);
+	}
+	
+	@Test
+	public void updateUserSuccess() throws Exception {
+		when(usRepository.updateUserById(any(Long.class),any(String.class),any(String.class),any(String.class))).thenReturn(1);
+		String message = bankAccountsService.updateUserById(new Admin(), 1l,"firstName", "lastName", "ABCE123");
+		assertNotNull(message);
+		assertEquals("User was updated successful.", message);
+	}
+	
+	@Test
+	public void updateUserException() throws Exception {
+		when(usRepository.updateUserById(any(Long.class),any(String.class),any(String.class),any(String.class))).thenThrow(Exception.class);
+		String message = bankAccountsService.updateUserById(new Admin(), 1l,"firstName", "lastName", "ABCE123");
+		assertNotNull(message);
+		assertEquals(BankAccountsService.ERROR_UPDATE_USER, message);
+	}
+	
+	@Test
+	public void updateUserNullResult() throws Exception {
+		when(usRepository.updateUserById(any(Long.class),any(String.class),any(String.class),any(String.class))).thenReturn(null);
+		String message = bankAccountsService.updateUserById(new Admin(), 1l,"firstName", "lastName", "ABCE123");
+		assertNotNull(message);
+		assertEquals(BankAccountsService.ERROR_UPDATE_USER, message);
+	}
+	
 
 }

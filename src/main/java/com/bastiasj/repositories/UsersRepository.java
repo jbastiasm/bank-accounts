@@ -17,17 +17,17 @@ public interface UsersRepository extends CrudRepository<Users, Long> {
 	@Modifying
 	@Transactional
 	@Query("DELETE FROM Users u WHERE u.id = ?1")
-	public Integer deleteUserById(Long id);
+	public Integer deleteUserById(Long id) throws Exception;
 	
 	@Modifying
 	@Transactional
 	@Query("UPDATE Users u SET u.firstName = ?2, u.lastName = ?3, u.iban = ?4 WHERE u.id = ?1")
-	public Integer updateUserById(Long id, String firstName, String lastName, String iban);
+	public Integer updateUserById(Long id, String firstName, String lastName, String iban ) throws Exception;
 	
-	@Query("SELECT u FROM Users u, Restriction r WHERE r.admin.id = ?1 AND u.id = r.user.id")
-	public List<Users> findAllUsersByAdmin(Long adminId);
+	@Query("SELECT u FROM Users u, Restriction r WHERE r.admin.id = ?1 AND r.list IS true AND u.id = r.user.id")
+	public List<Users> findAllUsersByAdmin(Long adminId) throws Exception;
 	
 	@Query("SELECT u FROM Users u WHERE u.iban = ?1")
-	public Users checkDuplicateIBAN(String iban);
+	public Users checkDuplicateIBAN(String iban) throws Exception;
 	
 }
