@@ -108,7 +108,7 @@ public class Commands {
 	 * @return Message with all restrictions
 	 */
 	@ShellMethodAvailability("isSuperAdminCommand")
-	@ShellMethod("List admin users.")
+	@ShellMethod("List restrictions.")
 	public String listrestrictions() {
 		return service.listRestrictions();
 	}
@@ -123,7 +123,7 @@ public class Commands {
 	 * @return result message
 	 */
 	@ShellMethodAvailability("isSuperAdminCommand")
-	@ShellMethod("Update a user on application.")
+	@ShellMethod("Update a restriction on application.")
 	public String updaterestriction(Long id, boolean delete, boolean list, boolean update) {
 		return service.updateRestriction(id, !delete, !list, !update);
 	}
@@ -173,8 +173,7 @@ public class Commands {
 			String lastName, 
 	        @Pattern(regexp = IBAN_VALIDATION_REGEX)
 			String iban) {
-		service.updateUserById(currentAdmin, id, firstName, lastName, iban);
-		return "User was updated";
+		return service.updateUserById(currentAdmin, id, firstName, lastName, iban);
 	}
 
 	/**
@@ -186,8 +185,7 @@ public class Commands {
 	@ShellMethodAvailability("isAdminCommand")
 	@ShellMethod("Delete a user on application.")
 	public String deleteuser(Long id) {
-		service.deleteUser(currentAdmin, id);
-		return "User was deleted";
+		return service.deleteUser(currentAdmin, id);
 	}
 
 	/**

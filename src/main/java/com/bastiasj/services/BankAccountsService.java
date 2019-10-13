@@ -110,7 +110,7 @@ public class BankAccountsService {
 
 	public String updateRestriction(Long id, boolean delete, boolean list, boolean update) {
 		try {
-			return resRepository.updateRestriction(id, delete, list, update) != null
+			return resRepository.updateRestriction(id, delete, list, update) != 0
 					? "Restriction was updated succesful."
 					: ERROR_RESTRICTION;
 		} catch (Exception e) {
@@ -152,10 +152,13 @@ public class BankAccountsService {
 	}
 
 	public String deleteUser(Admin admin, Long id) {
-		try {
-			return resRepository.deleteRestriction(admin.getId(), id) != null && usRepository.deleteUserById(id) != null
-					? "User deleted successful."
-					: ERROR_DELETE_USER;
+		try {			
+			final Integer resResult = resRepository.deleteRestriction(admin.getId(), id);
+			final Integer userResult = usRepository.deleteUserById(id);
+			
+			return (resResult == 0 || userResult == 0)
+					? ERROR_DELETE_USER 
+					: "User deleted successful.";
 		} catch (Exception e) {
 			return logException(ERROR_DELETE_USER, e);
 		}
@@ -163,7 +166,7 @@ public class BankAccountsService {
 
 	public String updateUserById(Admin admin, Long id, String firstName, String lastName, String iban) {
 		try {
-			return usRepository.updateUserById(id, firstName, lastName, iban) != null ? "User was updated successful."
+			return usRepository.updateUserById(id, firstName, lastName, iban) != 0 ? "User was updated successful."
 					: ERROR_UPDATE_USER;
 		} catch (Exception e) {
 			return logException(ERROR_UPDATE_USER, e);
