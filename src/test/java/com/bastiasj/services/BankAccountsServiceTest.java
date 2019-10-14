@@ -234,6 +234,10 @@ public class BankAccountsServiceTest {
 	
 	@Test
 	public void deleteUserSuccess() throws Exception {
+		Restriction res = new Restriction();
+		res.setDelete(true);
+		when(resRepository.getRestriction(any(Long.class),any(Long.class))).thenReturn(res);
+
 		when(resRepository.deleteRestriction(any(Long.class),any(Long.class))).thenReturn(1);
 		when(usRepository.deleteUserById(any(Long.class))).thenReturn(1);
 		String message = bankAccountsService.deleteUser(new Admin(), 1l);
@@ -243,6 +247,9 @@ public class BankAccountsServiceTest {
 	
 	@Test
 	public void deleteUserException() throws Exception {
+		Restriction res = new Restriction();
+		res.setDelete(true);
+		when(resRepository.getRestriction(any(Long.class),any(Long.class))).thenReturn(res);
 		when(resRepository.deleteRestriction(any(Long.class),any(Long.class))).thenThrow(Exception.class);
 		String message = bankAccountsService.deleteUser(new Admin(), 1l);
 		assertNotNull(message);
@@ -251,6 +258,9 @@ public class BankAccountsServiceTest {
 	
 	@Test
 	public void deleteUserNullResult() throws Exception {
+		Restriction res = new Restriction();
+		res.setDelete(true);
+		when(resRepository.getRestriction(any(Long.class),any(Long.class))).thenReturn(res);
 		when(resRepository.deleteRestriction(any(Long.class),any(Long.class))).thenReturn(null);
 		String message = bankAccountsService.deleteUser(new Admin(), 1l);
 		assertNotNull(message);
@@ -259,6 +269,9 @@ public class BankAccountsServiceTest {
 	
 	@Test
 	public void updateUserSuccess() throws Exception {
+		Restriction res = new Restriction();
+		res.setUpdate(true);
+		when(resRepository.getRestriction(any(Long.class),any(Long.class))).thenReturn(res);
 		when(usRepository.updateUserById(any(Long.class),any(String.class),any(String.class),any(String.class))).thenReturn(1);
 		String message = bankAccountsService.updateUserById(new Admin(), 1l,"firstName", "lastName", "ABCE123");
 		assertNotNull(message);
@@ -267,6 +280,9 @@ public class BankAccountsServiceTest {
 	
 	@Test
 	public void updateUserException() throws Exception {
+		Restriction res = new Restriction();
+		res.setUpdate(true);
+		when(resRepository.getRestriction(any(Long.class),any(Long.class))).thenReturn(res);
 		when(usRepository.updateUserById(any(Long.class),any(String.class),any(String.class),any(String.class))).thenThrow(Exception.class);
 		String message = bankAccountsService.updateUserById(new Admin(), 1l,"firstName", "lastName", "ABCE123");
 		assertNotNull(message);
@@ -275,6 +291,9 @@ public class BankAccountsServiceTest {
 	
 	@Test
 	public void updateUserNullResult() throws Exception {
+		Restriction res = new Restriction();
+		res.setUpdate(true);
+		when(resRepository.getRestriction(any(Long.class),any(Long.class))).thenReturn(res);
 		when(usRepository.updateUserById(any(Long.class),any(String.class),any(String.class),any(String.class))).thenReturn(null);
 		String message = bankAccountsService.updateUserById(new Admin(), 1l,"firstName", "lastName", "ABCE123");
 		assertNotNull(message);

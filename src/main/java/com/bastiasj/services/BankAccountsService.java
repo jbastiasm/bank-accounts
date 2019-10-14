@@ -153,6 +153,11 @@ public class BankAccountsService {
 
 	public String deleteUser(Admin admin, Long id) {
 		try {			
+			Restriction res =resRepository.getRestriction(admin.getId(), id);
+			if(res==null || !res.isDelete()) {
+				return "Command don't allowed for restriction.";
+			}
+			
 			final Integer resResult = resRepository.deleteRestriction(admin.getId(), id);
 			final Integer userResult = usRepository.deleteUserById(id);
 			
@@ -166,6 +171,10 @@ public class BankAccountsService {
 
 	public String updateUserById(Admin admin, Long id, String firstName, String lastName, String iban) {
 		try {
+			Restriction res =resRepository.getRestriction(admin.getId(), id);
+			if(res==null || !res.isUpdate()) {
+				return "Command don't allowed for restriction.";
+			}
 			return usRepository.updateUserById(id, firstName, lastName, iban) != 0 ? "User was updated successful."
 					: ERROR_UPDATE_USER;
 		} catch (Exception e) {

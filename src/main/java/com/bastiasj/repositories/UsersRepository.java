@@ -24,7 +24,7 @@ public interface UsersRepository extends CrudRepository<Users, Long> {
 	@Query("UPDATE Users u SET u.firstName = ?2, u.lastName = ?3, u.iban = ?4 WHERE u.id = ?1")
 	public Integer updateUserById(Long id, String firstName, String lastName, String iban ) throws Exception;
 	
-	@Query("SELECT u FROM Users u, Restriction r WHERE r.admin.id = ?1 AND r.list IS true AND u.id = r.user.id")
+	@Query("SELECT u FROM Users u, Restriction r WHERE r.admin.id = ?1 AND r.list = TRUE AND u.id = r.user.id")
 	public List<Users> findAllUsersByAdmin(Long adminId) throws Exception;
 	
 	@Query("SELECT u FROM Users u WHERE u.iban = ?1")

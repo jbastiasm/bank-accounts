@@ -21,4 +21,7 @@ public interface RestrictionsRepository extends CrudRepository<Restriction, Long
 	@Transactional
 	@Query("DELETE FROM Restriction r WHERE r.admin.id = ?1 AND r.user.id = ?2")
 	public Integer deleteRestriction(Long adminId, Long userId) throws Exception;
+	
+	@Query("SELECT r FROM Restriction r WHERE r.admin.id = ?1 AND r.user.id = ?2")
+	public Restriction getRestriction(Long adminId, Long userId) throws Exception;
 }
